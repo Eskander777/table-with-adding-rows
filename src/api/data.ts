@@ -81,3 +81,21 @@ export const ASIDE_ITEMS = [
   },
 ];
 
+export const DUMMY_DATA = [
+  {
+    child: [null],
+    equipmentCosts: 0,
+    estimatedProfit: 0,
+    id: 0,
+    machineOperatorSalary: 0,
+    mainCosts: 0,
+    materials: 0,
+    mimExploitation: 0,
+    overheads: 0,
+    rowName: "string",
+    salary: 0,
+    supportCosts: 0,
+    total: 0,
+  },
+];
+
