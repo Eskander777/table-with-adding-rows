@@ -1,6 +1,6 @@
 # React + TypeScript + Vite
 
-A table with availability to add, remove and delete rows
+A table with availability to add, remove and delete rows.
 Uses React19, Typescript an Sass
 
 ## To use:
