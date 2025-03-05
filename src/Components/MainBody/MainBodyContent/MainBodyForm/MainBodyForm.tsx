@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import RowButtons from "../../../UI/RowButtons/RowButtons";
 import styles from "./MainBodyForm.module.sass";
 import { RowClass } from "../../../../api/dataClasses";
@@ -15,6 +16,12 @@ export default function MainBodyForm({
   const equipmentCostsRef = useRef<HTMLInputElement>(null);
   const overheadsRef = useRef<HTMLInputElement>(null);
   const estimatedProfitRef = useRef<HTMLInputElement>(null);
+
+  useLayoutEffect(() => {
+    if (rowNameRef && rowNameRef.current) {
+      rowNameRef.current.focus();
+    }
+  }, []);
 
   const configureDataForRow = (e: React.KeyboardEvent) => {
     if (e.key !== "Enter") return;
