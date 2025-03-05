@@ -45,7 +45,7 @@ export default function MainBodyContent() {
     setRows((currentRows) => {
       const updatedRows = [...currentRows];
 
-      if (changedRowIndex) {
+      if (changedRowIndex || changedRowIndex === 0) {
         updatedRows[changedRowIndex] = rowToUpdate;
         setChangedRowIndex(undefined);
       }
