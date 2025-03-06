@@ -2,6 +2,7 @@ export class RowClass {
   child: null[];
   equipmentCosts: number;
   estimatedProfit: number;
+  parentId: null;
   id: number;
   machineOperatorSalary: number;
   mainCosts: number;
@@ -19,7 +20,8 @@ export class RowClass {
     equipmentCosts: number,
     overheads: number,
     estimatedProfit: number,
-    id = Math.random(),
+    id: number,
+    parentId = null,
     machineOperatorSalary = 0,
     mainCosts = 0,
     materials = 0,
@@ -41,6 +43,7 @@ export class RowClass {
     this.salary = salary;
     this.supportCosts = supportCosts;
     this.total = total;
+    this.parentId = parentId;
   }
 }
 

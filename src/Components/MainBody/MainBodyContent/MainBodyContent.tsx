@@ -1,61 +1,71 @@
-import { useState, useEffect } from "react";
-
-import styles from "./MainBodyContent.module.sass";
-import { RowClass } from "../../../api/dataClasses";
-import MainBodyHeaderRow from "./MainBodyHeaderRow/MainBodyHeader.Row";
-import MainBodyRow from "./MainBodyRow/MainBodyRow";
-import MainBodyForm from "./MainBodyForm/MainBodyForm";
+import styles from './MainBodyContent.module.sass';
+import { RowClass } from '../../../api/dataClasses';
+import MainBodyHeaderRow from './MainBodyHeaderRow/MainBodyHeader.Row';
+import MainBodyRow from './MainBodyRow/MainBodyRow';
+import MainBodyForm from './MainBodyForm/MainBodyForm';
+import { useHttp } from '../../../hooks/useHttp';
+import { addRow, updateRow, deleteRow } from '../../../api/methods';
 
 export default function MainBodyContent() {
-  const [rows, setRows] = useState<RowClass[]>([]);
-  const [isAdding, setIsAdding] = useState(false);
-  const [changedRowIndex, setChangedRowIndex] = useState<number | undefined>(
-    undefined
-  );
+  const {
+    rows,
+    setRows,
+    isAdding,
+    setIsAdding,
+    changedRowIndex,
+    setChangedRowIndex,
+  } = useHttp();
 
-  useEffect(() => {
-    setRows([]);
-  }, []);
+  const deleteRowHandler = async (index: number) => {
+    const rowToDelete = rows[index];
 
-  useEffect(() => {
-    if (rows.length === 0) {
-      setIsAdding(true);
+    const isDeleted = await deleteRow(rowToDelete);
+
+    if (isDeleted && isDeleted.success) {
+      setRows((curState: RowClass[]) =>
+        curState.filter((_, rowIndex) => rowIndex !== index)
+      );
     }
-  }, [rows]);
-
-  const deleteRowHandler = (index: number) => {
-    setRows((curState) => curState.filter((_, rowIndex) => rowIndex !== index));
   };
 
-  const addRowHandler = (newRow: RowClass) => {
-    setRows((currentRows) => {
-      const updatedRows = [...currentRows];
-      updatedRows.push(newRow);
+  const addRowHandler = async (newRow: RowClass) => {
+    const isAdded = await addRow(newRow);
 
-      return updatedRows;
-    });
-    setIsAdding(false);
+    if (isAdded && isAdded.success) {
+      setRows((currentRows: RowClass[]) => {
+        const updatedRows = [...currentRows];
+        newRow.id = isAdded.createdId;
+        updatedRows.push(newRow);
+
+        return updatedRows;
+      });
+      setIsAdding(false);
+    }
   };
 
   const selectRowToEdit = (rowIndex: number) => {
     setChangedRowIndex(rowIndex);
   };
 
-  const updateRows = (rowToUpdate: RowClass) => {
-    setRows((currentRows) => {
-      const updatedRows = [...currentRows];
+  const updateRows = async (rowToUpdate: RowClass) => {
+    const isUpdated = await updateRow(rowToUpdate);
 
-      if (changedRowIndex || changedRowIndex === 0) {
-        updatedRows[changedRowIndex] = rowToUpdate;
-        setChangedRowIndex(undefined);
-      }
+    if (isUpdated && isUpdated.success) {
+      setRows((currentRows) => {
+        const updatedRows = [...currentRows];
 
-      return updatedRows;
-    });
+        if (changedRowIndex || changedRowIndex === 0) {
+          updatedRows[changedRowIndex] = rowToUpdate;
+          setChangedRowIndex(undefined);
+        }
+
+        return updatedRows;
+      });
+    }
   };
 
   return (
-    <div className={styles["content-list"]}>
+    <div className={styles['content-list']}>
       <MainBodyHeaderRow />
       {rows.length > 0 && (
         <>
