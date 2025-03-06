@@ -44,6 +44,7 @@ export default function MainBodyContent() {
   };
 
   const selectRowToEdit = (rowIndex: number) => {
+    if (isAdding) return;
     setChangedRowIndex(rowIndex);
   };
 
@@ -85,7 +86,10 @@ export default function MainBodyContent() {
                 key={item.id}
                 item={item}
                 index={index}
-                onAdd={() => setIsAdding(true)}
+                onAdd={() => {
+                  if (changedRowIndex || changedRowIndex === 0) return;
+                  setIsAdding(true);
+                }}
                 onDelete={deleteRowHandler}
                 selectRowToEdit={selectRowToEdit}
               />
